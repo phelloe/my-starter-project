@@ -11,9 +11,9 @@ public enum PMF {
 
     private final PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("Tutorial");
 
-    public Inventory create(final Inventory inventory) {
+    public Inventory create(final InventoryDialog dialog) {
         try (PersistenceManager pm = pmf.getPersistenceManager()) {
-            return pm.makePersistent(inventory);
+            return pm.makePersistent(dialog.writeBean(new Inventory()));
         }
     }
 
@@ -25,9 +25,9 @@ public enum PMF {
         }
     }
 
-    public void update(final Inventory inventory) {
+    public Inventory update(final Inventory inventory, final InventoryDialog dialog) {
         try (PersistenceManager pm = pmf.getPersistenceManager()) {
-            pm.getObjectById(Inventory.class, inventory.getId()).update(inventory);
+            return dialog.writeBean(pm.getObjectById(Inventory.class, inventory.getId()));
         }
     }
 
